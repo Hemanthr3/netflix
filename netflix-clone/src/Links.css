@@ -1,0 +1,11 @@
+.nav-links a{
+    text-decoration: none;
+    color: white;
+    font-size: large;
+    font-weight: 600;
+}
+
+.nav-links{
+    display: flex;
+    
+}
