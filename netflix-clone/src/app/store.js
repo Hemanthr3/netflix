@@ -5,6 +5,6 @@ import planReducer from '../features/planSlice';
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    // plan: planReducer,
+    plan: planReducer,
   },
 });

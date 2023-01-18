@@ -1,16 +1,17 @@
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { selectPlan, setplan } from "./features/planSlice";
+import { selectPlan, setplan } from "./features/planSlice";
 import { selectUser } from "./features/userSlice";
 import db from "./firebase";
 import "./PlanScreen.css";
 
 const PlanScreen = () => {
   const [products, setProducts] = useState();
+  const [subscription, setSubscription] = useState(null);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  const [subscription, setSubscription] = useState(null);
+  const currentPlan = useSelector(selectPlan);
 
   useEffect(() => {
     db.collection("customers")
@@ -27,10 +28,9 @@ const PlanScreen = () => {
           });
         });
       });
-      // dispatch(setplan({
-      //   plan: subscription.name,
-      // }))
   }, [user.uid]);
+
+  console.log("subs",subscription)
 
   useEffect(() => {
     db.collection("products")
@@ -51,9 +51,6 @@ const PlanScreen = () => {
         setProducts(products);
       });
   }, []);
-
-  // console.log(products);
-  // console.log("Subscription is", subscription);
 
   const loadCheckout = async (priceId) => {
     const docRef = await db
@@ -81,26 +78,49 @@ const PlanScreen = () => {
       }
     });
   };
+  useEffect(() => {
+    dispatch(
+      setplan({
+        plan: subscription?.role,
+      })
+    );
+  }, [subscription]);
 
   return (
     <div className="planScreen">
-    <br/>
-    {subscription && <p>Renewal date:{new Date(subscription?.current_period_end*1000).toLocaleDateString()}</p>}
+      <br />
+      {subscription && (
+        <p>
+          Renewal date:
+          {new Date(
+            subscription?.current_period_end * 1000
+          ).toLocaleDateString()}
+        </p>
+      )}
       {products &&
         Object.entries(products).map(([productId, productData]) => {
-          const isCurrentPackage = productData.name
-            ?.includes(subscription?.role);
-            console.log(isCurrentPackage);
+          const isCurrentPackage = productData.name?.includes(
+            subscription?.role
+          );
+          console.log(isCurrentPackage);
+
           return (
-            <div 
-            key={productId}
-            className={`${isCurrentPackage && "planScreen_plan--disabled" } planScreen_plan`}>
+            <div
+              key={productId}
+              className={`${
+                isCurrentPackage && "planScreen_plan--disabled"
+              } planScreen_plan`}
+            >
               <div className="planScreen_info">
                 <h5>{productData.name}</h5>
                 <h6>{productData.description}</h6>
               </div>
-              <button onClick={() => !isCurrentPackage && loadCheckout(productData.prices.priceId)}>
-                {isCurrentPackage ?  "Current Package" :"Subscribe"}
+              <button
+                onClick={() =>
+                  !isCurrentPackage && loadCheckout(productData.prices.priceId)
+                }
+              >
+                {isCurrentPackage ? "Current Package" : "Subscribe"}
               </button>
             </div>
           );

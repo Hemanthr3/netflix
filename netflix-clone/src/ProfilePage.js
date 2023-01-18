@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-// import { selectPlan } from "./features/planSlice";
+import { selectPlan } from "./features/planSlice";
 import { selectUser } from "./features/userSlice";
 import { auth } from "./firebase";
 import Nav from "./Nav";
@@ -9,8 +9,7 @@ import "./ProfileScreen.css";
 
 const ProfilePage = () => {
   const user = useSelector(selectUser);
-    // const plan = useSelector(selectPlan);
-
+    const currentPlan = useSelector(selectPlan);
   return (
     <div className="profileScreen">
       <Nav />
@@ -22,29 +21,10 @@ const ProfilePage = () => {
             alt=""
           />
           <div className="profileScreen_details">
-            <h2>{user.email}</h2>
+            <h2>{user?.email}</h2>
             <div className="profileScreen_plans">
-              <h3>Plans</h3>
+              <h3>Plans (Current plan is {currentPlan?.plan})</h3>
               <PlanScreen/>
-              {/* <p>Renewal date: 12/01/2023</p> */}
-              {/* <div className="profileScreen_plan">
-                <div className="plan">
-                  <h4>Netflix Standard 1080p</h4>
-                </div>
-                <button>Subscribe</button>
-              </div> */}
-              {/* <div className="profileScreen_plan">
-                <div className="plan">
-                  <h4>Netflix Basic 480p</h4>
-                </div>
-                <button>Subscribe</button>
-              </div> */}
-              {/* <div className="profileScreen_plan">
-                <div className="plan">
-                  <h4>Netflix Premium 4k+HDR</h4>
-                </div>
-                <button>Subscribe</button>
-              </div> */}
               <button
                 onClick={() => auth.signOut()}
                 className="profileScreen_signOut"

@@ -27,7 +27,7 @@ const LoginScreen = () => {
         </h3>
         <div className="loginScreen_input">
           <form>
-            <input type="email" placeholder="Email Address"></input>
+            {/* <input type="email" placeholder="Email Address"></input> */}
             <button
               onClick={() => setSignIn(true)}
               className="loginScreen_getStarted"
