@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import "./SignUpScreen.css";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 
@@ -10,43 +9,51 @@ const SignUpScreen = () => {
 
   const register = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
-
-  //   const register = (e) => {
-  //     e.preventDefault();
-  //     auth.createUserWithEmailAndPassword(
-  //       emailRef.current.value,
-  //       passwordRef.current.value
-  //     ).then((authUser)=>{
-  //         console.log(authUser)
-  //     }).catch(error => {
-  //         alert(error.message);
-
+  //   createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+  //     .then((user) => {
+  //       console.log(user);
+  //     })
+  //     .catch((error) => {
+  //       alert(error.message);
   //     });
-  //   };
+  // };
+
+      auth.createUserWithEmailAndPassword(
+        emailRef.current.value,
+        passwordRef.current.value
+      ).then((authUser)=>{
+          console.log(authUser)
+      }).catch(error => {
+          alert(error.message);
+
+      });
+    };
 
   const signIn = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-      .then((userCredential) => {
-        // Signed in
-        console.log(userCredential);
-        // const user = userCredential.user;
-        // ...
-      })
-      .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        alert(error.message);
-        // ..
+     auth.signInWithEmailAndPassword(
+        emailRef.current.value,
+        passwordRef.current.value
+      ).then((authUser)=>{
+          console.log(authUser)
+      }).catch(error => {
+          alert(error.message);
+
       });
+
+    // signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+    //   .then((userCredential) => {
+    //     // Signed in
+    //     console.log(userCredential);
+    //     // const user = userCredential.user;
+    //     // ...
+    //   })
+    //   .catch((error) => {
+    //     // const errorCode = error.code;
+    //     // const errorMessage = error.message;
+    //     alert(error.message);
+    //     // ..
+    //   });
   };
 
   return (
